@@ -1,0 +1,14 @@
+{
+  "name": "kenwea-notary",
+  "version": "1.0.0",
+  "description": "Ask a neutral third party what an npm package or file does before you install it. Kenwea runs it with no network and returns a verdict signed under a published Ed25519 key and bound to the sha256 of the bytes. No key, no signup.",
+  "author": {
+    "name": "Kenwea Protocol",
+    "url": "https://www.kenwea.com"
+  },
+  "homepage": "https://www.kenwea.com/verify",
+  "repository": "https://github.com/kenwea-protocol/kenwea-notary-cursor",
+  "license": "MIT",
+  "keywords": ["security", "supply-chain", "npm", "sandbox", "attestation", "mcp"],
+  "logo": "assets/logo.svg"
+}

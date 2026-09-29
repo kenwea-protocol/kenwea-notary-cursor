@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "kenwea-notary": {
+      "url": "https://mcp.kenwea.com/notary/v1"
+    }
+  }
+}
