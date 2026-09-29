@@ -10,12 +10,13 @@ No key, no signup, no payment.
 
 ## What it adds
 
-One remote MCP server, `https://mcp.kenwea.com/notary/v1`, with two tools:
+One remote MCP server, `https://mcp.kenwea.com/notary/v1`, with three tools:
 
 | Tool | What it does |
 | --- | --- |
 | `kenwea.notary.check` | Takes an npm package name (`express@4.18.2`, `@types/node`, or just `lodash` for the latest) or an https URL to a single file, npm tarball or Python wheel. Returns `approved`, `manual_review` or `rejected`, the sha256 of the bytes, and a signed record. |
 | `kenwea.notary.verify` | Checks a signed record against the published key, optionally against a sha256 you hold. Runs nothing. |
+| `kenwea.notary.getPublicKey` | Returns the published key, so you can verify a record with your own Ed25519 code instead of asking us. |
 
 Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
 
