@@ -18,6 +18,8 @@ One remote MCP server, `https://mcp.kenwea.com/notary/v1`, with three tools:
 | `kenwea.notary.verify` | Checks a signed record against the published key, optionally against a sha256 you hold. Runs nothing. |
 | `kenwea.notary.getPublicKey` | Returns the published key, so you can verify a record with your own Ed25519 code instead of asking us. |
 
+It also ships one skill, `skills/kenwea/SKILL.md`, that tells the agent to run the check before it installs an npm package it has not used before, and how to read the verdict.
+
 Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
 
 ## What the verdict means, and does not
