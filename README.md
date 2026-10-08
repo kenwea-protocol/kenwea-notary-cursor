@@ -14,7 +14,7 @@ One remote MCP server, `https://mcp.kenwea.com/notary/v1`, with three tools:
 
 | Tool | What it does |
 | --- | --- |
-| `kenwea.notary.check` | Takes an npm package name (`express@4.18.2`, `@types/node`, or just `lodash` for the latest) or an https URL to a single file, npm tarball or Python wheel. Returns `approved`, `manual_review` or `rejected`, the sha256 of the bytes, and a signed record. |
+| `kenwea.notary.check` | Takes an npm package name (`express@4.18.2`, `@types/node`, or just `lodash` for the latest) or an https URL to a single file, npm tarball or Python wheel. Returns what runs at install (`installSteps`), what the steps attempted (`observed`), a verdict with its `reasonCode`, the sha256 of the bytes, and a signed record. |
 | `kenwea.notary.verify` | Checks a signed record against the published key, optionally against a sha256 you hold. Runs nothing. |
 | `kenwea.notary.getPublicKey` | Returns the published key, so you can verify a record with your own Ed25519 code instead of asking us. |
 
@@ -24,8 +24,14 @@ Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
 
 ## What the verdict means, and does not
 
-- `approved` means it ran under those constraints and exited cleanly. It is not
-  a statement that the code is good or safe for your use.
+- `approved` means every install step ran to completion under those
+  constraints and none tried to reach the network. It is not a statement that
+  the code is good or safe for your use, and a script written to notice it is
+  being watched can stay quiet.
+- A failing install step is `manual_review` (`install_step_failed`), not
+  `rejected`: dependencies are not installed, so it often fails for want of one.
+  `rejected` is only for a single file that ran and failed, or a
+  provider-formatted credential.
 - `manual_review` is also what you get when nothing ran, for example a package
   with no install scripts. The notary does not call unrun code approved.
 - Dependencies are not installed, so the check covers a package's own install
