@@ -26,11 +26,11 @@ The `kenwea-notary` MCP server bundled with this plugin fetches the exact bytes 
    - `observed` is what those steps attempted: network addresses, DNS names and the programs they started.
    - `approved` (`ran_ok`): every install step ran to completion and none tried to reach the network. Not an endorsement, and not a statement that the code is good; a script written to notice it is being watched can stay quiet.
    - `manual_review` with `ran_tried_network`: a step tried to reach the network. Tell the user what it reached and ask before installing.
-   - `manual_review` with `install_step_failed`: a step ran and failed. Dependencies are not installed, so this is often for want of one; the output shows which. It is evidence neither way, so say that.
+   - `manual_review` with `install_step_failed`: a step ran and failed. There is no network and no native build tools, so it can fail for our reason, for example a step that downloads a binary; the output shows which. It is evidence neither way, so say that.
    - `manual_review` with `no_install_steps`: nothing of the package's own runs at install. Useful to know, and not a pass.
    - `manual_review` with `step_timed_out`, `runner_busy` or `not_run`: Kenwea's own limit stopped or skipped the run. Say so; nothing is concluded about the package.
    - `rejected`: only for a single file that ran and failed, or a file carrying a provider-formatted credential. Show the reason and ask before going ahead.
-3. Mention the limits when they matter: dependencies are not installed, so the check covers the package's own install steps and not its dependency tree, and code that runs only when the app calls it is not exercised.
+3. Mention the limits when they matter: for a registry package the whole dependency tree is installed and every install step in it runs, the dependencies' first, each one named in the record; steps are traced with eBPF from the kernel, which does not slow them (the record's tracer field says so; strace, the fallback, slows some programs several times), and code that runs only when the app calls it is not exercised.
 
 Without a key the server allows 20 checks an hour per network address. If a check is refused for the limit, say so and continue only if the user agrees.
 

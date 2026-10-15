@@ -29,13 +29,16 @@ Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
   the code is good or safe for your use, and a script written to notice it is
   being watched can stay quiet.
 - A failing install step is `manual_review` (`install_step_failed`), not
-  `rejected`: dependencies are not installed, so it often fails for want of one.
+  `rejected`: there is no network and the dependencies' own install steps do
+  not run, so it can fail for our reason.
   `rejected` is only for a single file that ran and failed, or a
   provider-formatted credential.
 - `manual_review` is also what you get when nothing ran, for example a package
   with no install scripts. The notary does not call unrun code approved.
-- Dependencies are not installed, so the check covers a package's own install
-  surface, not its transitive tree.
+- For a registry package the whole dependency tree is installed and every
+  install step in it runs, the dependencies' first, each one named in the
+  record. Steps are traced with eBPF from the kernel, which does not slow
+  them; the record's tracer field says so.
 - A URL that cannot be fetched returns `checked: false` with the reason and no
   signature, never a verdict.
 
