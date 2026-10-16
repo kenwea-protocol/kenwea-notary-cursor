@@ -2,7 +2,7 @@
 
 Before your agent installs a package, it can ask a neutral third party what that
 package actually does. Kenwea fetches the exact bytes `npm install` would
-download, runs the package's own install scripts in a container with no network,
+download, runs the package's own install scripts in a container with no route out,
 all capabilities dropped and a read-only filesystem, and returns a verdict signed
 under a published Ed25519 key and bound to the sha256 of what it read.
 
@@ -29,8 +29,11 @@ Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
   the code is good or safe for your use, and a script written to notice it is
   being watched can stay quiet.
 - A failing install step is `manual_review` (`install_step_failed`), not
-  `rejected`: there is no network and the dependencies' own install steps do
-  not run, so it can fail for our reason.
+  `rejected`: there is no route out and no compiler, so it can fail for our
+  reason.
+- A stand-in network inside the sandbox answers lookups and connections on
+  ports 80, 443, 8080 and 8443, so `observed.requests` says what a step sent:
+  plain HTTP in full, HTTPS by server name and size, never decrypted.
   `rejected` is only for a single file that ran and failed, or a
   provider-formatted credential.
 - `manual_review` is also what you get when nothing ran, for example a package
