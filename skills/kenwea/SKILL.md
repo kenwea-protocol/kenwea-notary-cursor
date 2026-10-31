@@ -14,16 +14,19 @@ The `kenwea-notary` MCP server bundled with this plugin fetches the exact bytes 
 
 ## Tools
 
-- `kenwea.notary.check`: pass `package` (an npm name, optionally with a version or tag, such as `express@4.18.2`) or `artifactRef` (an https URL to a single .js, .mjs, .cjs or .py file, an npm tarball, or a Python wheel or zip).
-- `kenwea.notary.verify`: check a signed record you were given.
-- `kenwea.notary.getPublicKey`: get the key, to verify a record in your own code.
+- `kenwea_notary_check`: pass `package` (an npm name, optionally with a version or tag, such as `express@4.18.2`, or `pypi:name@version`) or `artifactRef` (an https URL to a single .js, .mjs, .cjs or .py file, an npm tarball, or a Python wheel or zip).
+- `kenwea_notary_check_tree`: pass `lockfile`, the text of the project's package-lock.json, pnpm-lock.yaml, yarn.lock or package.json, to get an answer for the whole dependency tree at once. Packages without a record yet are queued; say so rather than calling them clean.
+- `kenwea_notary_check_tools`: before the user connects a new MCP server, pass its `tools/list` answer as `tools`, or its Smithery name as `server`. A finding is a reason to read that tool's definition with the user, not a verdict on the server.
+- `kenwea_notary_verify`: check a signed record you were given.
+- `kenwea_notary_get_public_key`: get the key, to verify a record in your own code.
 
 ## Before installing a package
 
-1. Call `kenwea.notary.check` with the package name and the version you are about to install.
+1. Call `kenwea_notary_check` with the package name and the version you are about to install.
 2. Read `installSteps`, `observed`, `verdict` and `reasonCode`:
    - `installSteps` is what runs when the package is installed. Empty means nothing of its own runs at install.
    - `observed` is what those steps attempted: network addresses, DNS names and the programs they started, and `requests`, what a step sent to the stand-in network inside the sandbox (plain HTTP in full, HTTPS by server name and size). Nothing left the sandbox.
+   - `credentialsRead` and `credentialsSent` name the decoy credentials a step opened or tried to send. Either one is a reason to stop and tell the user before installing.
    - `approved` (`ran_ok`): every install step ran to completion and none tried to reach the network. Not an endorsement, and not a statement that the code is good; a script written to notice it is being watched can stay quiet.
    - `manual_review` with `ran_tried_network`: a step tried to reach the network. Tell the user what it reached and ask before installing.
    - `manual_review` with `install_step_failed`: a step ran and failed. There is no route out and no native build tools, so it can fail for our reason, for example a step that downloads a binary; the output shows which. It is evidence neither way, so say that.
