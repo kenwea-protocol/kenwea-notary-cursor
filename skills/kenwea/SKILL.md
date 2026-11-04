@@ -25,7 +25,7 @@ The `kenwea-notary` MCP server bundled with this plugin fetches the exact bytes 
 1. Call `kenwea_notary_check` with the package name and the version you are about to install.
 2. Read `installSteps`, `observed`, `verdict` and `reasonCode`:
    - `installSteps` is what runs when the package is installed. Empty means nothing of its own runs at install.
-   - `observed` is what those steps attempted: network addresses, DNS names and the programs they started, and `requests`, what a step sent to the stand-in network inside the sandbox (plain HTTP in full, HTTPS by server name and size). Nothing left the sandbox.
+   - `observed` is what those steps attempted: network addresses, DNS names and the programs they started, and `requests`, what a step sent to the stand-in network inside the sandbox (plain HTTP in full; HTTPS in full when the step accepted the stand-in's certificate authority, which the record marks "read inside TLS", and otherwise by server name and size). Nothing left the sandbox.
    - `credentialsRead` and `credentialsSent` name the decoy credentials a step opened or tried to send. Either one is a reason to stop and tell the user before installing.
    - `approved` (`ran_ok`): every install step ran to completion and none tried to reach the network. Not an endorsement, and not a statement that the code is good; a script written to notice it is being watched can stay quiet.
    - `manual_review` with `ran_tried_network`: a step tried to reach the network. Tell the user what it reached and ask before installing.

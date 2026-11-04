@@ -35,9 +35,12 @@ Try asking Cursor: "Before adding left-pad, check it with the Kenwea notary."
 - A failing install step is `manual_review` (`install_step_failed`), not
   `rejected`: there is no route out and no compiler, so it can fail for our
   reason.
-- A stand-in network inside the sandbox answers lookups and connections on
-  ports 80, 443, 8080 and 8443, so `observed.requests` says what a step sent:
-  plain HTTP in full, HTTPS by server name and size, never decrypted.
+- A stand-in network inside the sandbox answers every lookup and every TCP
+  connection, on any port and straight to any IP address, so
+  `observed.requests` says what a step sent: plain HTTP in full, HTTPS in full
+  when the step accepts the stand-in's own certificate authority (the sandbox
+  tells steps to trust it, as a CI runner behind an inspecting proxy is told
+  to), and by server name and size when it refuses it.
   `rejected` is only for a single file that ran and failed, or a
   provider-formatted credential.
 - `manual_review` is also what you get when nothing ran, for example a package
